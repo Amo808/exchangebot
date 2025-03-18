@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import router
+from app.api.routes import router
 
 app = FastAPI(
     title="MCP Server",
