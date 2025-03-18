@@ -1,9 +1,9 @@
 import httpx
 import os
 
-EXCHANGE_API = "https://v6.exchangerate-api.com/v6/YOUR-API-KEY/latest/USD"
+EXCHANGE_API = "https://v6.exchangerate-api.com/v6/2dc684080d73dfbaaf30281d/latest/USD"
 WEATHER_API = "https://api.openweathermap.org/data/2.5/weather"
-NEWS_API = "https://newsapi.org/v2/everything?q=world&from=2024-09-15&sortBy=publishedAt&apiKey=YOUR-API-KEY"
+NEWS_API = "https://newsapi.org/v2/everything?q=world&from=2024-09-15&sortBy=publishedAt&apiKey=81cd5664f3d34be1bc4c708cab5e854a"
 
 async def get_exchange_rate():
     async with httpx.AsyncClient() as client:
