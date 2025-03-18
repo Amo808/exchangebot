@@ -1,16 +1,18 @@
-from fastapi.testclient import TestClient
-from app.main import app
+from app.services import get_currency_rate, get_weather, get_news
+import pytest
+import asyncio
 
-client = TestClient(app)
+@pytest.mark.asyncio
+async def test_currency():
+    result = await get_currency_rate("USD", "EUR", 1)
+    assert "rates" in result
 
-def test_exchange_rate():
-    response = client.get("/exchange-rate")
-    assert response.status_code == 200
+@pytest.mark.asyncio
+async def test_weather():
+    result = await get_weather("London")
+    assert "location" in result
 
-def test_weather():
-    response = client.get("/weather/Moscow")
-    assert response.status_code == 200
-
-def test_news():
-    response = client.get("/news")
-    assert response.status_code == 200
+@pytest.mark.asyncio
+async def test_news():
+    result = await get_news()
+    assert "news" in result

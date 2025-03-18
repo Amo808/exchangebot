@@ -1,44 +1,44 @@
 import httpx
+import datetime
 
-# API-ключи
+# API-ключ
 RAPIDAPI_KEY = "4bc55e00fbmshdf3198af3475aaap136df8jsn26a1c06c2582"
 
 # API URL-адреса
-METEOSTAT_API = "https://meteostat.p.rapidapi.com/point/monthly"
-YFINANCE_QUOTES_API = "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes"
-YFINANCE_NEWS_API = "https://yahoo-finance166.p.rapidapi.com/api/news/list-by-symbol"
+WEATHER_API = "https://weather-api-by-any-city.p.rapidapi.com/weather"
+CURRENCY_API = "https://currency-converter5.p.rapidapi.com/currency/convert"
+NEWS_API = "https://reuters-business-and-financial-news.p.rapidapi.com/market-rics/list-rics-by-asset-and-category"
 
-async def get_weather_history(lat: float, lon: float, alt: int, start: str, end: str):
+async def get_currency_rate(from_currency: str, to_currency: str, amount: float):
     """
-    Получение исторических погодных данных (месячные).
+    Получение текущего курса валют.
     """
-    params = {"lat": lat, "lon": lon, "alt": alt, "start": start, "end": end}
-    headers = {"x-rapidapi-host": "meteostat.p.rapidapi.com", "x-rapidapi-key": RAPIDAPI_KEY}
+    params = {"format": "json", "from": from_currency, "to": to_currency, "amount": amount, "language": "en"}
+    headers = {"x-rapidapi-host": "currency-converter5.p.rapidapi.com", "x-rapidapi-key": RAPIDAPI_KEY}
 
     async with httpx.AsyncClient() as client:
-        response = await client.get(METEOSTAT_API, headers=headers, params=params)
+        response = await client.get(CURRENCY_API, headers=headers, params=params)
         return response.json()
 
-async def get_stock_quotes(tickers: list):
+async def get_weather(city: str):
     """
-    Получение котировок акций по указанным тикерам.
+    Получение прогноза погоды для указанного города.
     """
-    tickers_str = ",".join(tickers)
-    params = {"ticker": tickers_str}
-    headers = {"x-rapidapi-host": "yahoo-finance15.p.rapidapi.com", "x-rapidapi-key": RAPIDAPI_KEY}
+    headers = {"x-rapidapi-host": "weather-api-by-any-city.p.rapidapi.com", "x-rapidapi-key": RAPIDAPI_KEY}
 
     async with httpx.AsyncClient() as client:
-        response = await client.get(YFINANCE_QUOTES_API, headers=headers, params=params)
+        response = await client.get(f"{WEATHER_API}/{city}", headers=headers)
         return response.json()
 
-async def get_stock_news(tickers: list, region: str, snippet_count: int):
+async def get_news():
     """
-    Получение новостей по тикерам.
+    Получение новостей за последнюю неделю.
     """
-    tickers_str = ",".join(tickers)
-    params = {"s": tickers_str, "region": region, "snippetCount": snippet_count}
-    headers = {"x-rapidapi-host": "yahoo-finance166.p.rapidapi.com", "x-rapidapi-key": RAPIDAPI_KEY}
+    headers = {"x-rapidapi-host": "reuters-business-and-financial-news.p.rapidapi.com", "x-rapidapi-key": RAPIDAPI_KEY}
+
+    last_week = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d")
+    params = {"date": last_week}
 
     async with httpx.AsyncClient() as client:
-        response = await client.get(YFINANCE_NEWS_API, headers=headers, params=params)
+        response = await client.get(NEWS_API, headers=headers, params=params)
         return response.json()
