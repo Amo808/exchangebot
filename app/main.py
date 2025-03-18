@@ -7,8 +7,4 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-app.include_router(router)  # Верни маршруты!
-
-@app.get("/")
-def read_root():
-    return {"message": "ExchangeBot is running!"}
+app.include_router(router)
