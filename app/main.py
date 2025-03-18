@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from app.api import router
 
-app = FastAPI(title="MCP Server")
+app = FastAPI()
 
-app.include_router(router)
+@app.get("/")
+def read_root():
+    return {"message": "ExchangeBot is running!"}
