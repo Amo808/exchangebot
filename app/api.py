@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query
-from services import get_currency_rate, get_weather, get_news
+from app.services import get_currency_rate, get_weather, get_news
 
 router = APIRouter()
 
